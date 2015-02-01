@@ -1,0 +1,142 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vundle and plugins setup
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+Plugin 'tpope/vim-fugitive'
+" plugin from http://vim-scripts.org/vim/scripts.html
+" Plugin 'L9'
+" Git plugin not hosted on GitHub
+" Plugin 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (i.e. when working on your own plugin)
+" Plugin 'file:///home/gmarik/path/to/plugin'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Avoid a name conflict with L9
+" Plugin 'user/L9', {'name': 'newL9'}
+
+Plugin 'scrooloose/nerdtree.git'
+Plugin 'scrooloose/nerdcommenter.git'
+Plugin 'scrooloose/syntastic.git'
+Plugin 'kien/ctrlp.vim.git'
+Plugin 'Lokaltog/vim-easymotion.git'
+Plugin 'tpope/vim-surround'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'bling/vim-airline'
+Plugin 'tpope/vim-rails'
+Plugin 'majutsushi/tagbar'
+Plugin 'mileszs/ack.vim'
+Plugin 'ervandew/supertab'
+Plugin 'pangloss/vim-javascript'
+Plugin 'godlygeek/tabular'
+Plugin 'vim-ruby/vim-ruby'
+Plugin 'honza/vim-snippets'
+Plugin 'tpope/vim-haml'
+Plugin 'mattn/gist-vim'
+Plugin 'slim-template/vim-slim'
+Plugin 'tpope/vim-cucumber'
+Plugin 'elzr/vim-json'
+Plugin 'thoughtbot/vim-rspec'
+Plugin 'toyamarinyon/vim-swift'
+Plugin 'nginx.vim'
+Plugin 'klen/python-mode'
+" Plugin 'Valloric/YouCompleteMe'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+" filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Set some shit
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let mapleader=","
+
+set number
+set mouse=a
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set expandtab
+set smartcase
+set incsearch
+set nohlsearch
+set backspace=indent,eol,start
+set backspace=2 " make backspace work like most other apps
+
+autocmd BufWritePre * :%s/\s\+$//e
+autocmd BufWritePre *.rb :%s/\s\+$//e
+
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Color Scheme
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+syntax enable
+colorscheme benokai
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Airline
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" TagBar
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+nmap <F8> :TagbarToggle<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" NERDTree
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+map <C-n> :NERDTreeToggle<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" RSpec
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+map <Leader>t :call RunCurrentSpecFile()<CR>
+map <Leader>l :call RunLastSpec()<CR>
+map <Leader>a :call RunAllSpecs()<CR>
+
