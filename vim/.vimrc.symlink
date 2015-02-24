@@ -79,6 +79,7 @@ filetype plugin indent on    " required
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader=","
+let $BASH_ENV = "~/.bash_aliases"
 
 set number
 set mouse=a
@@ -130,6 +131,7 @@ nmap <F8> :TagbarToggle<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 map <C-n> :NERDTreeToggle<CR>
+let NERDTreeShowHidden=1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " RSpec
@@ -140,3 +142,9 @@ map <Leader>t :call RunCurrentSpecFile()<CR>
 map <Leader>l :call RunLastSpec()<CR>
 map <Leader>a :call RunAllSpecs()<CR>
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Ctrlp
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:ctrlp_show_hidden = 1
