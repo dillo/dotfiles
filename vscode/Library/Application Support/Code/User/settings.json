@@ -1,0 +1,29 @@
+{
+    "editor.minimap.renderCharacters": false,
+    "editor.fontSize": 18,
+    "editor.minimap.enabled": false,
+    "debug.console.fontSize": 14,
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.fontSize": 15,
+    "editor.tabSize": 2,
+    "atomKeymap.promptV3Features": true,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.formatOnPaste": true,
+    "emmet.includeLanguages": {
+        "HTML (Eex)": "html"
+    },
+    "search.exclude": {
+        "**/_build": true,
+        "**/deps": true
+    },
+    "window.zoomLevel": 0,
+    "workbench.startupEditor": "newUntitledFile",
+    "search.actionsPosition": "right",
+    "search.location": "panel",
+    "explorer.autoReveal": false,
+    "workbench.editor.enablePreview": false,
+    "workbench.editor.enablePreviewFromQuickOpen": false,
+    "search.useReplacePreview": false,
+    "search.showLineNumbers": true,
+    "search.smartCase": true
+}
