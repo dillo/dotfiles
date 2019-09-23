@@ -1,0 +1,62 @@
+# FUNCTIONS
+function parse_git_branch {
+   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
+# ALL ALIASES GO HERE
+alias pry="pry --simple-prompt"
+alias postgres_start="pg_ctl -D /usr/local/var/postgres -l logfile start"
+alias postgres_stop="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
+alias bake="bundle exec rake"
+alias pip="pip3"
+alias bec="bundle exec rspec spec/"
+alias gst="git status"
+alias gco="git checkout"
+alias gci="git commit"
+alias gas="git stash"
+alias gpr="git pull --rebase"
+alias gbr="git branch"
+alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gpo="git push origin"
+alias gbr_d="git branch --merged | grep -v '\*' | xargs -n 1 git branch -d"
+alias gbr_del="git branch -r --merged dev | grep -v -E 'master|dev|qa|release' | sed  -e 's/origin\///' | xargs git push origin --delete"
+alias cv="rm -rf spec/vcr_cassettes"
+alias pj="python -m json.tool"
+alias bbox="ssh draju@bot001.tools.useast2.rentpath.com -t sudo su - deploy"
+alias cut="curl -o -s -w %{time_total}\\n"
+alias redis='redis-cli -n 1 -h localhost'
+alias vcam="sudo killall VDCAssistant"
+alias consul_ci="envconsul -consul-addr=consul001.useast2.rentpath.com:8500 -prefix env/ci -upcase -sanitize -pristine env"
+alias sfo="ls -p | grep -v /"
+alias apache_stop="sudo /usr/sbin/apachectl stop"
+alias webpack_errors="webpack --display-error-details"
+alias check='mix test && mix credo && mix dialyzer'
+alias start_gateway="ELASTICSEARCH_DEBUG=true envconsul -consul-addr=https://consul-useast2.tools.rentpath.com -once -prefix env/ci/elasticsearch -prefix env/ci/mobile_gateway -upcase -sanitize -pristine env | sort > ~/.mobile_gateway_env.txt && while read line; do export $line; done < ~/.mobile_gateway_env.txt && mix phx.server"
+
+# VARIABLE DECLARATION
+TXTGREEN='\e[0;32m' # Green
+
+# ALL EXPORT GOES HERE
+export GITAWAREPROMPT=~/.bash/git-aware-prompt
+source "${GITAWAREPROMPT}/main.sh"
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_101.jdk/Contents/Home
+export JBOSS_HOME=/usr/local/opt/jboss-as/libexec
+export GOPATH=$HOME/golang
+export PATH=$PATH:~/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/local/lib:/usr/local/var:/usr/local/etc:/usr/local/opt/go/libexec/bin:/usr/local/bin/erl:/usr/local/opt/openssl/bin:~/.cargo/bin:/Users/berzerker
+export PATH=/Library/PostgreSQL/11.5/bin:$PATH
+export NODE_PATH=/usr/local/bin/node
+export NVM_DIR="/Users/berzerker/.nvm"
+export ERL_AFLAGS="-kernel shell_history enabled"
+export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/lib
+export PS1="\[$txtblu\]\t:\u \[\$txtylw\]\w \[\$txtpur\]\$git_branch\[\$txtred\]\$git_dirty\[\$txtrst\]\$ "
+export SUDO_PS1="\[$bakred\]\t:\u\[$txtrst\] \w\$ "
+# export LDFLAGS="-L/usr/local/opt/openssl/lib"
+# export CPPFLAGS="-I/usr/local/opt/openssl/include"
+export PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig"
+# LOAD THINGS
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use
+
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
+# Add Visual Studio Code (code)
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
