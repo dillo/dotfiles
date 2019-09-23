@@ -20,6 +20,7 @@ set incsearch
 set laststatus=2
 set nohlsearch
 set nomodeline
+set noswapfile
 set relativenumber
 set number
 set ruler
@@ -29,8 +30,10 @@ set smartcase
 set smarttab
 set softtabstop=2
 set tabstop=2
-set tw=90
+set tw=98
 set wrap linebreak nolist
+set splitright
+set splitbelow
 
 """" START Vundle Configuration """"
 set nobackup
@@ -45,13 +48,12 @@ call vundle#begin('~/.vim/bundle/plugins')
 """""""""""""""""""""""""""""
 Plugin 'VundleVim/Vundle.vim'
 """""""""""""""""""""""""""""
-Plugin 'bling/vim-airline'
+" Plugin 'vim-airline/vim-airline'
 Plugin 'c-brenn/phoenix.vim'
 Plugin 'elixir-editors/vim-elixir'
 Plugin 'elzr/vim-json'
 Plugin 'jlanzarotta/bufexplorer'
 Plugin 'kien/ctrlp.vim.git'
-Plugin 'klen/python-mode'
 Plugin 'lokikl/vim-ctrlp-ag'
 Plugin 'ludovicchabant/vim-gutentags'
 Plugin 'mileszs/ack.vim'
@@ -74,28 +76,18 @@ Plugin 'tpope/vim-surround'
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'ayu-theme/ayu-vim'
 Plugin 'leafgarland/typescript-vim'
+Plugin 'kaicataldo/material.vim'
+Plugin 'morhetz/gruvbox'
 """""""""""""""""""""""""""""
 call vundle#end()
 filetype plugin indent on
 """""""""""""""""""""""""""""
 
-" Theme and Styling
-" set background=dark
-" set t_Co=256
-" colorscheme jellybeans
-" colorscheme onehalfdark
-
-set termguicolors     " enable true colors support
-" let ayucolor="light"  " for light version of theme
-let ayucolor="mirage" " for mirage version of theme
-" let ayucolor="dark"   " for dark version of theme
-colorscheme ayu
+let g:solarized_termcolors=256
+set background=dark
+colorscheme solarized
 
 " Vim-Airline Configuration
-" let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 1
-let g:hybrid_custom_term_colors = 1
-let g:hybrid_reduced_contrast = 1
 
 " Vim-Alchemist Configuration
 let g:alchemist_tag_disable = 1
