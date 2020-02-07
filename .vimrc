@@ -102,9 +102,10 @@ filetype plugin indent on
 " colorscheme paramount
 " colorscheme molokai
 " colorscheme gruvbox
+let g:codedark_conservative = 1
 colorscheme codedark
-highlight LineNr ctermbg=236
-highlight Search ctermbg=236
+" highlight LineNr ctermbg=236
+" highlight Search ctermbg=236
 
 " Vim-Airline Configuration
 let g:airline_theme = 'codedark'
@@ -175,3 +176,4 @@ let g:indentLine_color_term = 236
 
 " autocomplete
 set completeopt+=menuone
+
