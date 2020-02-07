@@ -3,6 +3,7 @@
 """""""""""""""""""""""""""""""""""""
 set nocompatible
 syntax on
+
 set autoread
 set backspace=2
 set backspace=indent,eol,start
@@ -18,13 +19,11 @@ set guioptions-=e
 set hidden
 set incsearch
 set laststatus=2
-set nohlsearch
 set nomodeline
 set noswapfile
 set relativenumber
 set number
 set ruler
-" set scrolloff=999
 set shiftwidth=2
 set smartcase
 set smarttab
@@ -34,6 +33,9 @@ set tw=98
 set wrap linebreak nolist
 set splitright
 set splitbelow
+set modifiable
+set scrolloff=10
+" set scrolloff=999
 
 """" START Vundle Configuration """"
 set nobackup
@@ -42,16 +44,34 @@ set nobackup
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/vundle/Vundle.vim
+set rtp+=$HOME/.vim/bundle/Vundle.vim " in OS X
 call vundle#begin('~/.vim/bundle/plugins')
 
 """""""""""""""""""""""""""""
 Plugin 'VundleVim/Vundle.vim'
 """""""""""""""""""""""""""""
-" Plugin 'vim-airline/vim-airline'
+"""""""""""""""""""""""""""""
+" Everyday library plugins
+"""""""""""""""""""""""""""""
 Plugin 'c-brenn/phoenix.vim'
 Plugin 'elixir-editors/vim-elixir'
 Plugin 'elzr/vim-json'
+Plugin 'nginx.vim'
+Plugin 'pangloss/vim-javascript'
+Plugin 'maxmellon/vim-jsx-pretty'
+Plugin 'slashmili/alchemist.vim'
+Plugin 'slim-template/vim-slim'
+Plugin 'tpope/vim-haml'
+Plugin 'tpope/vim-rails'
+Plugin 'vim-ruby/vim-ruby'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'fatih/vim-go'
+Plugin 'kchmck/vim-coffee-script'
+" Plugin 'sheerun/vim-polyglot'
+"""""""""""""""""""""""""""""
+" Extension plugins
+"""""""""""""""""""""""""""""
+Plugin 'vim-airline/vim-airline'
 Plugin 'jlanzarotta/bufexplorer'
 Plugin 'kien/ctrlp.vim.git'
 Plugin 'lokikl/vim-ctrlp-ag'
@@ -59,50 +79,55 @@ Plugin 'ludovicchabant/vim-gutentags'
 Plugin 'mileszs/ack.vim'
 Plugin 'nanotech/jellybeans.vim'
 Plugin 'neomake/neomake'
-Plugin 'nginx.vim'
-Plugin 'pangloss/vim-javascript'
 Plugin 'rking/ag.vim'
 Plugin 'scrooloose/nerdtree'
-Plugin 'sheerun/vim-polyglot'
-Plugin 'slashmili/alchemist.vim'
-Plugin 'slim-template/vim-slim'
-Plugin 'sonph/onehalf', {'rtp': 'vim/'}
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-haml'
 Plugin 'tpope/vim-projectionist'
-Plugin 'tpope/vim-rails'
 Plugin 'tpope/vim-surround'
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'ayu-theme/ayu-vim'
-Plugin 'leafgarland/typescript-vim'
-Plugin 'kaicataldo/material.vim'
-Plugin 'morhetz/gruvbox'
+Plugin 'Yggdroot/indentLine'
+Plugin 'lifepillar/vim-mucomplete'
 """""""""""""""""""""""""""""
+" Colorscheme
+"""""""""""""""""""""""""""""
+Plugin 'morhetz/gruvbox'
+Plugin 'tomasiser/vim-code-dark'
+Plugin 'tomasr/molokai'
+Plugin 'owickstrom/vim-colors-paramount'
+
 call vundle#end()
 filetype plugin indent on
 """""""""""""""""""""""""""""
 
-let g:solarized_termcolors=256
-set background=dark
-colorscheme solarized
+" colorscheme paramount
+" colorscheme molokai
+" colorscheme gruvbox
+colorscheme codedark
+highlight LineNr ctermbg=236
+highlight Search ctermbg=236
 
 " Vim-Airline Configuration
+let g:airline_theme = 'codedark'
 
 " Vim-Alchemist Configuration
-let g:alchemist_tag_disable = 1
+let g:alchemist_tag_disable = 0
 
 " AUTOCMD
 autocmd FocusGained * checktime
-autocmd! BufWritePost * Neomake
+" autocmd! BufWritePost * Neomake
 autocmd BufWritePre * :%s/\s\+$//e
+autocmd FileType ruby setlocal expandtab shiftwidth=2 tabstop=2
 
 " NERDTree Configuration
 map <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 let g:NERDTreeWinPos = "left"
 let NERDTreeShowLineNumbers=1
-" autocmd FileType nerdtree setlocal relativenumber
+autocmd FileType nerdtree setlocal relativenumber
+" let NERDTreeQuitOnOpen = 1
+let NERDTreeAutoDeleteBuffer = 1
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
 
 " CTRLP
 let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
@@ -139,3 +164,14 @@ vnoremap \k :m '<-2<CR>gv=gv
 
 " Gutentags
 let g:gutentags_cache_dir = '~/.tags_cache'
+
+" vim-go lsp
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
+
+" indentation
+let g:indentLine_char = '┆'
+let g:indentLine_color_term = 236
+
+" autocomplete
+set completeopt+=menuone
