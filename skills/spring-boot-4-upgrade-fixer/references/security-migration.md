@@ -57,6 +57,23 @@ Key renames in this transition:
 
 In Spring Security 7, the non-lambda forms (`authorizeHttpRequests()` with chained methods, not a lambda) have been removed — always use the lambda.
 
+## Matcher classes removed (Spring Security 7)
+
+`AntPathRequestMatcher` and `MvcRequestMatcher` are **removed** in Spring Security 7 — this hits code that constructs matchers directly (custom filters, `CsrfConfigurer.ignoringRequestMatchers`, `setFilterProcessesUrl` setups), not just the DSL:
+
+```java
+// Old
+new AntPathRequestMatcher("/api/**", "POST")
+
+// New
+PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.POST, "/api/**")
+```
+
+Gotchas:
+- Patterns must be **absolute** (start with `/`, minus the context root); relative or suffix patterns that Ant matching tolerated are rejected at startup.
+- `PathPattern` semantics differ slightly from Ant (notably `**` placement rules) — flag matcher rewrites in the final report as needing a security-rule re-test.
+- Filters extending `AbstractAuthenticationProcessingFilter` that called `setFilterProcessesUrl(...)` should pass a `PathPatternRequestMatcher` to `setRequiresAuthenticationRequestMatcher(...)` instead.
+
 ## `WebSecurityCustomizer` for ignoring requests
 
 The old `web.ignoring().antMatchers(...)` pattern becomes a `WebSecurityCustomizer` bean:

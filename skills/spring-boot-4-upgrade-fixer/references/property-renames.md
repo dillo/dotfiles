@@ -16,6 +16,28 @@ Run the app once, fix the warnings the migrator emits, then remove the dependenc
 
 The most common renames to know about:
 
+## Profile activation in multi-document YAML (jumps from Spring Boot ≤2.3)
+
+Spring Boot 2.4 overhauled config-file processing, and the legacy mode was removed in 3.0. Multi-document YAML using the old key fails at startup:
+
+| Old (SB ≤2.3) | New |
+|---|---|
+| `spring.profiles: prod` (inside a `---` document) | `spring.config.activate.on-profile: prod` |
+| `spring.profiles.include` inside a profile-specific document | Not allowed anymore — move to profile groups (`spring.profiles.group.*`) in the default document |
+
+This is the single most common startup failure for projects coming from 2.3 or earlier.
+
+## Auto-configuration excludes (Spring Boot 4)
+
+`spring.autoconfigure.exclude` entries hold FQNs, and Boot 4 moved auto-configuration classes to new packages (see `boot-4-modularization.md`). Old FQNs stop matching **silently**. Grep all config files for `autoconfigure` and update.
+
+## Jackson (Spring Boot 4)
+
+| Old | New |
+|---|---|
+| `spring.jackson.read.*` | `spring.jackson.json.read.*` |
+| `spring.jackson.write.*` | `spring.jackson.json.write.*` |
+
 ## Redis
 
 | Old (SB 2.x) | New (SB 3.x+) |
