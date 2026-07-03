@@ -1,6 +1,6 @@
-# Hibernate 6 migration
+# Hibernate 6/7 migration
 
-Spring Boot 3.x brought Hibernate 6 (replacing Hibernate 5.6.x from SB 2.7). Spring Boot 4.x stays on the Hibernate 6 line but with further point-release changes. The biggest breaks come from the 5 → 6 jump:
+Spring Boot 3.x brought Hibernate 6 (replacing Hibernate 5.6.x from SB 2.7). **Spring Boot 4.x ships Hibernate ORM 7.x** (Jakarta Persistence 3.2, part of the Jakarta EE 11 baseline). The biggest breaks still come from the 5 → 6 jump:
 
 - All persistence annotations now live in `jakarta.persistence` (see `jakarta-migration.md`).
 - Several `Dialect` classes were merged into single per-vendor dialects.
@@ -95,13 +95,19 @@ Also a compile-time non-issue but a startup-time failure — flag in the final r
 
 ## Naming strategy
 
-The default physical naming strategy (`SpringPhysicalNamingStrategy`) is unchanged in behavior, but its package moved in early Spring Boot 3 releases. If `application.properties` references it by FQN, the import is:
+`SpringPhysicalNamingStrategy` was **removed** in Spring Boot 3 — Hibernate's own `CamelCaseToUnderscoresNamingStrategy` became the default and behaves the same for the common camelCase → snake_case mapping. If `application.properties`/`yml` references the old class by FQN:
 
 ```
 spring.jpa.hibernate.naming.physical-strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
 ```
 
-Verify against the version in the project's pom.xml.
+the app fails at startup with `ClassNotFoundException`. Fix: **delete the property** (the default is equivalent), or if it must be explicit, point it at `org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy`.
+
+## Hibernate 7 specifics (Boot 4)
+
+- `hibernate-jpamodelgen` (the JPA metamodel annotation processor) was replaced by `hibernate-processor` — update the artifactId if the pom declares it.
+- Hibernate 7.1 no longer allows re-associating a **detached entity** with a persistence context (patterns like `session.lock(detached, NONE)` / relying on implicit reattach). Runtime issue, not compile — flag in the final report if the code uses detached-entity patterns or long conversations.
+- `hibernate-proxool` and `hibernate-vibur` connection-pool integrations are no longer published; projects using them must move to HikariCP (Boot's default).
 
 ## When to pause and ask
 

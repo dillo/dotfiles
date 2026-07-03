@@ -22,6 +22,7 @@ These are Jakarta EE specifications that were renamed:
 | `javax.annotation.Resource` | `jakarta.annotation.Resource` |
 | `javax.annotation.Priority` | `jakarta.annotation.Priority` |
 | `javax.mail.*` | `jakarta.mail.*` |
+| `javax.activation.*` | `jakarta.activation.*` (comes along with mail) |
 | `javax.websocket.*` | `jakarta.websocket.*` |
 | `javax.json.*` | `jakarta.json.*` |
 | `javax.jms.*` | `jakarta.jms.*` |
@@ -38,6 +39,7 @@ These are Jakarta EE specifications that were renamed:
 **Never rewrite these.** They are part of the Java SE platform and have no `jakarta.*` equivalent. Rewriting them will fail to compile.
 
 - `javax.crypto.*` (JCE)
+- `javax.cache.*` (JCache / JSR-107 — common with Spring caching + Ehcache; it never joined Jakarta and stays `javax.cache`)
 - `javax.net.*` and `javax.net.ssl.*`
 - `javax.naming.*` (JNDI)
 - `javax.sql.*` (e.g., `DataSource`, `RowSet` — JDBC extension; the `jakarta.persistence` rename does NOT cover this)

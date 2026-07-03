@@ -29,12 +29,24 @@ The behavior is intentionally the same; only the import and annotation name chan
 
 ## JUnit 4 is gone from the starter
 
-`spring-boot-starter-test` stopped including JUnit 4 (`junit:junit:4.x`) starting in Spring Boot 2.4 and the `junit-vintage-engine` was removed by default in 3.0. If the project still has JUnit 4 tests:
+`spring-boot-starter-test` stopped including JUnit 4 (`junit:junit:4.x`) starting in Spring Boot 2.4 and the `junit-vintage-engine` was removed by default in 3.0. Spring Boot 4 ships the current JUnit line (JUnit Jupiter; the platform's 6.x generation), where the vintage engine is **deprecated** and logs discovery warnings — it still works, but only as a temporary migration aid. If the project still has JUnit 4 tests:
 
-- Either add `org.junit.vintage:junit-vintage-engine` as a test dependency to keep them running.
+- Either add `org.junit.vintage:junit-vintage-engine` as a test dependency to keep them running short-term.
 - Or migrate the tests to JUnit 5 (out of scope for this skill — flag for the developer).
 
 Compile errors that look like `package org.junit does not exist` (vs. `org.junit.jupiter.api`) indicate stranded JUnit 4 tests. Ask the developer.
+
+## `@SpringBootTest` no longer auto-configures test clients (Boot 4)
+
+In Boot 4, `@SpringBootTest` stopped providing `MockMvc`, `TestRestTemplate`, and `WebTestClient` automatically. Tests that inject them fail with `NoSuchBeanDefinitionException` (a **test-runtime** failure, not compile). Add the explicit annotation:
+
+| Injected type | Required annotation |
+|---|---|
+| `MockMvc` | `@AutoConfigureMockMvc` |
+| `TestRestTemplate` | `@AutoConfigureTestRestTemplate` |
+| `WebTestClient` / `RestTestClient` | `@AutoConfigureRestTestClient` |
+
+Also from the Boot 4 test modularization: slice tests may need the technology's **test companion starter** (e.g., `spring-boot-starter-webmvc-test`) — see `boot-4-modularization.md`. `MockitoTestExecutionListener` was removed (use Mockito's own `MockitoExtension`), and `@PropertyMapping` moved to `org.springframework.boot.test.context`.
 
 ## `@RunWith(SpringRunner.class)` → `@ExtendWith(SpringExtension.class)`
 
@@ -42,17 +54,13 @@ If JUnit 4 was the test framework, `@RunWith(SpringRunner.class)` was the entry 
 
 If you see `@RunWith` annotations after migrating tests to JUnit 5, just remove them.
 
-## `MockMvc` and `WebTestClient`
+## `MockMvc` and `WebTestClient` APIs
 
-Unchanged for the common cases. `MockMvcBuilders.standaloneSetup(...)` and `MockMvcBuilders.webAppContextSetup(...)` still work. `WebTestClient` API surface is stable.
-
-## `TestRestTemplate`
-
-Unchanged. Still in `org.springframework.boot.test.web.client`.
+The APIs themselves are unchanged for the common cases — `MockMvcBuilders.standaloneSetup(...)` and `webAppContextSetup(...)` still work; `WebTestClient`'s surface is stable. What changed is *provisioning* (see the `@SpringBootTest` section above): the beans are no longer there unless you ask for them.
 
 ## `@AutoConfigureMockMvc`, `@AutoConfigureTestDatabase`, slice-test annotations
 
-All still present, all still work the same way.
+All still present and working — and in Boot 4, `@AutoConfigureMockMvc`/`@AutoConfigureTestRestTemplate` went from optional to **required** when injecting those beans under plain `@SpringBootTest`.
 
 ## When to pause and ask
 

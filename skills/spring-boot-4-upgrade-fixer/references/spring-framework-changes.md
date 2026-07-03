@@ -20,9 +20,37 @@ public class WebConfig implements WebMvcConfigurer {
 
 ## `RestTemplate` and `WebClient` are still here
 
-Despite long-standing community chatter, `RestTemplate` is **not** removed. It's in maintenance mode but still ships and works. Don't rewrite calls from `RestTemplate` to `RestClient` or `WebClient` as part of an upgrade — that's a refactor, not a migration. Leave it alone.
+`RestTemplate` is **not** removed. It still ships and works in Spring Framework 7, though it's now deprecated in the documentation (a formal `@Deprecated` is planned for 7.1). Don't rewrite calls from `RestTemplate` to `RestClient` or `WebClient` as part of an upgrade — that's a refactor, not a migration. Leave it alone, but mention the deprecation in the final report so the developer can plan.
 
-`RestClient` (Spring 6.1+) and `WebClient` are options for new code, but converting existing code is out of scope here.
+One real compile break in this area: configuring `RestTemplate` with **Apache HttpClient 4** (`HttpComponentsClientHttpRequestFactory` + `org.apache.http.*`). Spring Framework 6 moved to **HttpClient 5** (`org.apache.hc.client5.*`). The factory class name is the same but it now wraps HttpClient 5 types — the pom needs `org.apache.httpcomponents.client5:httpclient5` and the imports change. Similarly, OkHttp3 client support was removed in Framework 7.
+
+## `ListenableFuture` is removed (Framework 7)
+
+`org.springframework.util.concurrent.ListenableFuture` and `ListenableFutureCallback` are gone — everything returns `CompletableFuture` now. Classic hit: Spring Kafka send callbacks written against Boot 2.x:
+
+```java
+// Old
+ListenableFuture<SendResult<K, V>> f = kafkaTemplate.send(topic, msg);
+f.addCallback(onSuccess, onFailure);
+
+// New
+CompletableFuture<SendResult<K, V>> f = kafkaTemplate.send(topic, msg);
+f.whenComplete((result, ex) -> { if (ex == null) { ... } else { ... } });
+```
+
+Same pattern for `AsyncRestTemplate` remnants and `@Async` methods declared to return `ListenableFuture`.
+
+## `HttpMethod` is a class, not an enum (Framework 6)
+
+`switch` statements over `HttpMethod`, `HttpMethod.values()`, and `ordinal()`/`name()`-as-enum tricks fail to compile. Replace `switch` with `if`/`else` on `equals`, and `HttpMethod.valueOf(String)` still exists for parsing.
+
+## `HttpHeaders` no longer implements `MultiValueMap` (Framework 7)
+
+Code that passed `HttpHeaders` where a `MultiValueMap<String, String>` was expected, or called `Map` methods on it, breaks. `add`/`set`/`getFirst` still exist; for a genuine map view use `headers.asMultiValueMap()` (deprecated bridge). Rework call sites to the direct `HttpHeaders` API where trivial; ask if the map is used structurally.
+
+## Spring Data repository methods
+
+`getOne(id)` (deprecated since Spring Data 2.5) and `getById(id)` (deprecated since 2.7) are replaced by `getReferenceById(id)` — same lazy-reference semantics, direct rename. Note `findById` returns `Optional` (since Spring Data 2.0) — only relevant for jumps from very old code.
 
 ## `ResponseStatusException` constructors
 
@@ -46,9 +74,11 @@ Spring 6 introduced `HttpStatusCode` as an interface and made `HttpStatus` imple
 
 Spring 6 still supports `@RequestMapping` (and `@GetMapping`, etc.) on interface methods, but the annotation must be on the implementing class (or visible via interface attribute inheritance settings). No change usually needed.
 
-## Removed: `LinkedMultiValueMap` constructor with `int`
+## Removed packages/modules (Framework 7)
 
-A specific tiny one that bites occasionally: `new LinkedMultiValueMap<>(initialCapacity)` where `initialCapacity` is an `int` was removed. Use the default constructor.
+- `org.springframework.orm.hibernate5` — replaced by `org.springframework.orm.jpa.hibernate`. Code using `HibernateTransactionManager`/`LocalSessionFactoryBean` from the old package needs the new one.
+- `spring-jcl` — replaced by Apache Commons Logging 1.3.x (usually invisible; matters only if the pom excludes/pins `spring-jcl`).
+- Path-mapping options `suffixPatternMatch`, `trailingSlashMatch`, `favorPathExtension` on `WebMvcConfigurer.configurePathMatch` — delete the calls; the behaviors are gone (note the runtime consequence: `GET /foo/` no longer matches `/foo`).
 
 ## `Nullable` annotations
 
